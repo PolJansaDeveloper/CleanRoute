@@ -1,0 +1,65 @@
+CREATE TABLE clients (
+  id TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  notes TEXT,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+CREATE TABLE jobs (
+  id TEXT NOT NULL PRIMARY KEY,
+  client_id TEXT NOT NULL,
+  property_id TEXT NOT NULL,
+  template_id TEXT,
+  title TEXT NOT NULL,
+  scheduled_start INTEGER NOT NULL,
+  scheduled_end INTEGER,
+  actual_start INTEGER,
+  actual_end INTEGER,
+  status TEXT NOT NULL,
+  assigned_cleaner_name TEXT,
+  private_notes TEXT,
+  client_notes TEXT,
+  issue_notes TEXT,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+CREATE TABLE job_checklist_items (
+  id TEXT NOT NULL PRIMARY KEY,
+  job_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  is_required INTEGER NOT NULL,
+  is_completed INTEGER NOT NULL,
+  completed_at INTEGER,
+  sort_order INTEGER NOT NULL
+);
+CREATE TABLE settings (
+  key TEXT NOT NULL PRIMARY KEY,
+  value TEXT NOT NULL
+);
+
+selectAllJobs:
+SELECT * FROM jobs ORDER BY scheduled_start DESC;
+selectJobsForDay:
+SELECT * FROM jobs WHERE scheduled_start BETWEEN ? AND ? ORDER BY scheduled_start ASC;
+selectJobById:
+SELECT * FROM jobs WHERE id = ?;
+selectChecklistItemsByJobId:
+SELECT * FROM job_checklist_items WHERE job_id = ? ORDER BY sort_order;
+insertJob:
+INSERT OR REPLACE INTO jobs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+updateJobStatus:
+UPDATE jobs SET status = ?, updated_at = ?, actual_start = COALESCE(?, actual_start), actual_end = COALESCE(?, actual_end), issue_notes = COALESCE(?, issue_notes) WHERE id = ?;
+insertJobChecklistItem:
+INSERT OR REPLACE INTO job_checklist_items VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+updateJobChecklistItemCompletion:
+UPDATE job_checklist_items SET is_completed = ?, completed_at = ? WHERE id = ?;
+
+selectSetting:
+SELECT value FROM settings WHERE key = ?;
+upsertSetting:
+INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?);
+selectAllSettings:
+SELECT * FROM settings;

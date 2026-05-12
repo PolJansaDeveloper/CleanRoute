@@ -1,35 +1,32 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# CleanRoute
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+CleanRoute is an offline-first Kotlin Multiplatform app for cleaning businesses to manage jobs, property checklists, before/after photos and client-ready reports.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Stack
+- Kotlin Multiplatform
+- Compose Multiplatform
+- SQLDelight
+- Koin
+- Coroutines + StateFlow
+- kotlinx-datetime
+- Material 3
 
-### Build and Run Android Application
+## Implemented MVP Vertical Slice
+- Shared Compose UI for Today/Jobs/Settings tabs.
+- SQLDelight local database with jobs, checklist items, clients, and settings.
+- Offline repository and Flow-based state updates.
+- Seed-on-first-run baseline jobs.
+- Job lifecycle actions prepared in repository.
+- Common business-rule helper tests.
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+## Architecture
+- Shared UI in `commonMain`.
+- Feature-first shared domain/data/presentation layers.
+- SQLDelight persistence, repository pattern, StateFlow view models.
+- Offline-first local source of truth, prepared for future sync extension.
 
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
-
----
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Future Improvements
+- Full client/property/template CRUD screens.
+- Real camera/gallery integration with expect/actual pickers.
+- PDF report generation + share sheet.
+- Cloud sync/auth, recurring jobs, calendar sync, notifications.
